@@ -22,23 +22,66 @@ void draw(){
   image(img, 250, 0); 
   makeColorKey();
   colorMap();
+  drawSubVis1();
+  drawSubVis2();
 }
 
 //Desc: colors the map using the colors from the color key and values from the num_fires array
 void colorMap(){
   int i, j;
+  int init_rec_x = 250;
   int rec_x = 250;
   int rec_y = 0;
   int rec_h = 50;
   int rec_w = 73;
-  fill(#ff4d4d, 175);
-  rect(rec_x, rec_y, rec_w, rec_h);
+  int mid_rec_w = 79;
+  strokeWeight(1);
+  stroke(0);
   for(i = 1; i < 10; i++)
     {
       for(j = 1; j < 10; j++)
       {
-         //fill(getRed(num_fires[i][j]), 100);
+         fill(getRed(num_fires[i][j]), 175);
+         
+         if (j == 1){
+           if (i == 9){
+             rect(rec_x, rec_y, rec_w, rec_h - 10);
+             rec_x += rec_w;
+           }
+           else{
+             rect(rec_x, rec_y, rec_w, rec_h);
+             rec_x += rec_w;
+           }
+         }
+         
+         if ( j > 1 && j < 9){
+           if (i == 9){
+             rect(rec_x, rec_y, mid_rec_w, rec_h - 10);
+             rec_x += mid_rec_w;
+           }
+           else{
+             rect(rec_x, rec_y, mid_rec_w, rec_h);
+             rec_x += mid_rec_w;
+           } 
+         }
+         
+         if (j == 9){
+           if (i == 9){
+             rect(rec_x, rec_y, rec_w - 12, rec_h - 10);
+             rec_x += rec_w - 12;
+           }
+           else{
+             rect(rec_x, rec_y, rec_w - 12, rec_h);
+             rec_x += rec_w - 12;
+           }
+         }
+         
+
       }
+      
+      rec_x = init_rec_x; //+ (rec_h * i);
+      rec_y = rec_y + rec_h - 2;
+
     }
   
 }
@@ -123,4 +166,15 @@ void fillFire(){
       }
 
     }*/
+}
+
+void drawSubVis1(){
+  
+  
+}
+
+
+void drawSubVis2(){
+  
+  
 }
