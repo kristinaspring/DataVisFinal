@@ -10,6 +10,9 @@ PImage img;
 
 //only indexes 1-9 are used for sake of clarity with the map
 int num_fires[][] = new int[10][10];
+int rec_pos[][][] = new int[10][10][4];
+
+
 void setup(){
   size(1200, 950, P3D);
   img = loadImage("monte.png");
@@ -46,10 +49,20 @@ void colorMap(){
          if (j == 1){
            if (i == 9){
              rect(rec_x, rec_y, rec_w, rec_h - 10);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + rec_w;
+             rec_pos[i][j][2] = rec_y + rec_h - 10;
+             rec_pos[i][j][3] = rec_y;
+             
              rec_x += rec_w;
            }
            else{
              rect(rec_x, rec_y, rec_w, rec_h);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + rec_w;
+             rec_pos[i][j][2] = rec_y + rec_h;
+             rec_pos[i][j][3] = rec_y;
+             
              rec_x += rec_w;
            }
          }
@@ -57,10 +70,19 @@ void colorMap(){
          if ( j > 1 && j < 9){
            if (i == 9){
              rect(rec_x, rec_y, mid_rec_w, rec_h - 10);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + mid_rec_w;
+             rec_pos[i][j][2] = rec_y + rec_h - 10;
+             rec_pos[i][j][3] = rec_y;
+             
              rec_x += mid_rec_w;
            }
            else{
              rect(rec_x, rec_y, mid_rec_w, rec_h);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + mid_rec_w;
+             rec_pos[i][j][2] = rec_h + rec_y;
+             rec_pos[i][j][3] = rec_y;
              rec_x += mid_rec_w;
            } 
          }
@@ -68,10 +90,18 @@ void colorMap(){
          if (j == 9){
            if (i == 9){
              rect(rec_x, rec_y, rec_w - 12, rec_h - 10);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + (rec_w - 12);
+             rec_pos[i][j][2] = (rec_h - 10) + rec_y;
+             rec_pos[i][j][3] = rec_y;
              rec_x += rec_w - 12;
            }
            else{
              rect(rec_x, rec_y, rec_w - 12, rec_h);
+             rec_pos[i][j][0] = rec_x;
+             rec_pos[i][j][1] = rec_x + (rec_w - 12);
+             rec_pos[i][j][2] = rec_h + rec_y;
+             rec_pos[i][j][3] = rec_y;
              rec_x += rec_w - 12;
            }
          }
@@ -142,7 +172,7 @@ int getRed(int num){
 }
 
 
-//Desc: fills the num_fire array with values corresponding to howw many times an x-y pairing occurs in the data
+//Desc: fills the num_fire array with values corresponding to howw many times an x-y pairing occurs in the data.
 void fillFire(){
   int i, j, x, y;
   int k = fires.getRowCount();
@@ -168,6 +198,26 @@ void fillFire(){
     }*/
 }
 
+
+//Desc: Createes buttons for all the sectors and when a ssector is clicked causes the subvisdata to change to reflect that data.
+void mousePressed(){
+  
+  int i,j;
+ for(i = 1; i < 10; i++)
+    {
+      for(j = 1; j < 10; j++)
+      { 
+         if((mouseX >= rec_pos[i][j][0]) && (mouseX <= rec_pos[i][j][1]) && (mouseY <=  rec_pos[i][j][2]) && (mouseY >=  rec_pos[i][j][3])) {
+            //Right now just prints but can be used to cahnge data for the subvisuals
+            System.out.println("clicked  " + rec_pos[i][j][0]);
+            //changeSubVisData();
+         } 
+      }
+    }
+  
+}
+
+
 void drawSubVis1(){
   
   
@@ -178,3 +228,5 @@ void drawSubVis2(){
   
   
 }
+
+//referneces https://forum.processing.org/one/topic/create-multiple-buttons-in-processing.html
