@@ -14,7 +14,7 @@ int rec_pos[][][] = new int[10][10][4];
 
 
 void setup(){
-  size(1200, 950, P3D);
+  size(1200, 600, P3D);
   img = loadImage("monte.png");
   fires = loadTable("forestfires.csv");
   fillFire();
@@ -22,7 +22,7 @@ void setup(){
 
 void draw(){
   background(255);
-  image(img, 250, 0); 
+  image(img, 5, 0); 
   makeColorKey();
   colorMap();
   drawSubVis1();
@@ -32,8 +32,8 @@ void draw(){
 //Desc: colors the map using the colors from the color key and values from the num_fires array
 void colorMap(){
   int i, j;
-  int init_rec_x = 250;
-  int rec_x = 250;
+  int init_rec_x = 5;
+  int rec_x = 5;
   int rec_y = 0;
   int rec_h = 50;
   int rec_w = 73;
@@ -120,15 +120,15 @@ void colorMap(){
 void makeColorKey(){
   noStroke();
   fill(#ff4d4d, 175);
-  ellipse(1050, 50, 60, 60);
+  ellipse(50, 550, 60, 60);
   fill(#ff1a1a, 175);
-  ellipse(1050, 125, 60, 60);
+  ellipse(150, 550, 60, 60);
   fill(#ff0000, 175);
-  ellipse(1050, 200, 60, 60);
+  ellipse(250, 550, 60, 60);
   fill(#e60000, 175);
-  ellipse(1050, 275, 60, 60);
+  ellipse(350, 550, 60, 60);
   fill(#cc0000, 175);
-  ellipse(1050, 350, 60, 60);
+  ellipse(450, 550, 60, 60);
   
   
   /*fill(#ff0000, 100);
@@ -144,12 +144,13 @@ void makeColorKey(){
   
   
   fill(255);
+  textAlign(CENTER,CENTER);
   textSize(15);
-  text("0-10", 1034,  55);
-  text("11-20", 1030, 130);
-  text("21-30", 1030, 205);
-  text("31-40", 1030, 280);
-  text("41-50+", 1023, 355);
+  text("0-10", 50,  550);
+  text("11-20", 150, 550);
+  text("21-30", 250, 550);
+  text("31-40", 350, 550);
+  text("41-50+", 450, 550);
   
   
 }
