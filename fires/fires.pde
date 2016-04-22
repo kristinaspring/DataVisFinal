@@ -11,13 +11,16 @@ PImage img;
 //only indexes 1-9 are used for sake of clarity with the map
 int num_fires[][] = new int[10][10];
 int rec_pos[][][] = new int[10][10][4];
-
+int sel_i, sel_j;
 
 void setup(){
   size(1200, 600, P3D);
   img = loadImage("monte.png");
   fires = loadTable("forestfires.csv");
   fillFire();
+  num_fires[0][0] = 0;
+  sel_i = 1;
+  sel_j = 1;
 }
 
 void draw(){
@@ -25,10 +28,19 @@ void draw(){
   image(img, 5, 0); 
   makeColorKey();
   colorMap();
+  drawText();
   drawSubVis1();
   drawSubVis2();
 }
 
+
+void drawText(){
+  fill(0);
+  textSize(30);
+  text("Sector  " + Integer.toString(sel_j) + "," + Integer.toString(sel_i), 100,  450);
+  text("Number of Fires:  " +  Integer.toString(num_fires[sel_i][sel_j]) , 160,  485);
+  
+}
 //Desc: colors the map using the colors from the color key and values from the num_fires array
 void colorMap(){
   int i, j;
@@ -45,6 +57,17 @@ void colorMap(){
       for(j = 1; j < 10; j++)
       {
          fill(getRed(num_fires[i][j]), 175);
+         
+         if (sel_j == j && sel_i == i){
+           stroke(#002DA5);
+           strokeWeight(2);
+         }
+         else
+         {
+           stroke(0);
+           strokeWeight(1);
+         }
+         
          
          if (j == 1){
            if (i == 9){
@@ -210,7 +233,12 @@ void mousePressed(){
       { 
          if((mouseX >= rec_pos[i][j][0]) && (mouseX <= rec_pos[i][j][1]) && (mouseY <=  rec_pos[i][j][2]) && (mouseY >=  rec_pos[i][j][3])) {
             //Right now just prints but can be used to cahnge data for the subvisuals
-            System.out.println("clicked  " + rec_pos[i][j][0]);
+            sel_i = i;
+            sel_j = j;
+            fill(0);
+            textAlign(CENTER,CENTER);
+            textSize(30);
+            text("Sector", 50,  450);
             //changeSubVisData();
          } 
       }
