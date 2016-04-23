@@ -11,16 +11,21 @@ PImage img;
 //only indexes 1-9 are used for sake of clarity with the map
 int num_fires[][] = new int[10][10];
 int rec_pos[][][] = new int[10][10][4];
-int sel_i, sel_j;
+float wind[][] = new float[81][52];
+float temp[][] = new float[81][52];
+int sel_i, sel_j, n;
 
 void setup(){
   size(1200, 600, P3D);
   img = loadImage("monte.png");
   fires = loadTable("forestfires.csv");
   fillFire();
+  setUpWind();
+  setUpTemp();
   num_fires[0][0] = 0;
   sel_i = 1;
   sel_j = 1;
+  n = -1;
 }
 
 void draw(){
@@ -222,6 +227,53 @@ void fillFire(){
     }*/
 }
 
+void setUpWind() {
+  int s = fires.getRowCount();
+  int x = 1;
+  int y = 1;
+  int tn = 0;
+  for (int i=0; i<81; i++) {
+    for (int j=0; j<52; j++) {
+      wind[i][j] = -1;
+    }
+  }
+  for (int i=1; i<s; i++) {
+    x = fires.getInt(i, 0);
+    y = fires.getInt(i, 1);
+    tn = (x-1)*9+y-1;
+    for (int j=0; j<52; j++) {
+      if (wind[tn][j] == -1) {
+        wind[tn][j] = fires.getFloat(i,10);
+        j=52;
+      }
+    }
+  }
+}
+
+
+void setUpTemp() {
+  int s = fires.getRowCount();
+  int x = 1;
+  int y = 1;
+  int tn = 0;
+  for (int i=0; i<81; i++) {
+    for (int j=0; j<52; j++) {
+      temp[i][j] = -1;
+    }
+  }
+  for (int i=1; i<s; i++) {
+    x = fires.getInt(i, 0);
+    y = fires.getInt(i, 1);
+    tn = (x-1)*9+y-1;
+    for (int j=0; j<52; j++) {
+      if (temp[tn][j] == -1) {
+        temp[tn][j] = fires.getFloat(i,8);
+        j=52;
+      }
+    }
+  }
+}
+
 
 //Desc: Createes buttons for all the sectors and when a ssector is clicked causes the subvisdata to change to reflect that data.
 void mousePressed(){
@@ -232,9 +284,10 @@ void mousePressed(){
       for(j = 1; j < 10; j++)
       { 
          if((mouseX >= rec_pos[i][j][0]) && (mouseX <= rec_pos[i][j][1]) && (mouseY <=  rec_pos[i][j][2]) && (mouseY >=  rec_pos[i][j][3])) {
-            //Right now just prints but can be used to cahnge data for the subvisuals
+            //Right now just prints but can be used to change data for the subvisuals
             sel_i = i;
             sel_j = j;
+            n = (i-1)*9+j-1;
             fill(0);
             textAlign(CENTER,CENTER);
             textSize(30);
@@ -248,8 +301,54 @@ void mousePressed(){
 
 
 void drawSubVis1(){
+  int beginx = 740;
+  int beginy = 30;
+  int subvisw = 400;
+  int subvish = 250;
+  fill(0);
+  rect(720,300,400,250);
+  drawSub1Axis();
+  if (n>-1) {
+    boolean done = false;
+    int i = 0;
+    while (!done) {
+      if (wind[n][i]>-1) {
+        float xcoord = beginx+temp[n][i]*(subvisw-10)/35;
+        float ycoord = beginy+subvish-10-wind[n][i]*(subvish-10)/10;
+        ellipse(xcoord,ycoord,2,2);
+        i++;
+        if (i>=52) {
+          done = true;
+        }
+      }
+      else {
+        done = true;
+      }
+    }
+  }
   
-  
+}
+
+void drawSub1Axis() {
+  int beginx = 740;
+  int beginy = 30;
+  int subvisw = 400;
+  int subvish = 250;
+  line(beginx+4,beginy,beginx+4,beginy+subvish-10);
+  line(beginx+4,beginy+subvish-10,beginx+4+subvisw,beginy+subvish-10);
+  for (int i=0;i<11;i++) {
+    int ycoord = beginy+subvish-10-i*(subvish-10)/10;
+    line(beginx-4,ycoord,beginx+4,ycoord);
+    textSize(10);
+    text(i+".0",beginx-7,ycoord-7);
+  }
+  for (int i=0;i<8;i++) {
+    int ycoord = beginy+subvish-10;
+    int xcoord = beginx+4+i*5*(subvisw-10)/35;
+    line(xcoord,ycoord,xcoord,ycoord+8);
+    textSize(10);
+    text(i*5,xcoord,ycoord+12);
+    }
 }
 
 
