@@ -43,7 +43,7 @@ void drawText(){
   fill(0);
   textSize(30);
   text("Sector  " + Integer.toString(sel_j) + "," + Integer.toString(sel_i), 100,  450);
-  text("Number of Fires:  " +  Integer.toString(num_fires[sel_i][sel_j]) , 160,  485);
+  text("Number of Fires:  " +  Integer.toString(num_fires[sel_j][sel_i]) , 160,  485);
   
 }
 //Desc: colors the map using the colors from the color key and values from the num_fires array
@@ -61,7 +61,7 @@ void colorMap(){
     {
       for(j = 1; j < 10; j++)
       {
-         fill(getRed(num_fires[i][j]), 175);
+         fill(getRed(num_fires[j][i]), 175);
          
          if (sel_j == j && sel_i == i){
            stroke(#002DA5);
