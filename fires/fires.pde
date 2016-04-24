@@ -287,7 +287,7 @@ void mousePressed(){
             //Right now just prints but can be used to change data for the subvisuals
             sel_i = i;
             sel_j = j;
-            n = (i-1)*9+j-1;
+            n = (j-1)*9+i-1;
             fill(0);
             textAlign(CENTER,CENTER);
             textSize(30);
