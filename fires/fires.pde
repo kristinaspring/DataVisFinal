@@ -19,7 +19,7 @@ int sel_i, sel_j, n;
 int[] data=new int[1];
 
 void setup(){
-  size(1200, 600, P3D);
+  size(1200, 600);
   img = loadImage("monte.png");
   fires = loadTable("forestfires.csv");
   fillFire();
@@ -309,6 +309,7 @@ void drawSubVis1(){
   int subvisw = 400;
   int subvish = 250;
   fill(0);
+  strokeWeight(1);
   stroke(150,0,0);
   drawSub1Axis();
   if (n>-1) {
