@@ -68,12 +68,12 @@ void colorMap(){
          
          if (sel_j == j && sel_i == i){
            stroke(#002DA5);
-           strokeWeight(2);
+           strokeWeight(3);
          }
          else
          {
            stroke(0);
-           strokeWeight(1);
+           strokeWeight(0.5);
          }
          
          
@@ -181,7 +181,7 @@ void makeColorKey(){
   text("11-20", 150, 550);
   text("21-30", 250, 550);
   text("31-40", 350, 550);
-  text("41-50+", 450, 550);
+  text("41-50+", 451, 550);
   
   
 }
