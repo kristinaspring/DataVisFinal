@@ -238,8 +238,8 @@ void setUpWind() {
     }
   }
   for (int i=1; i<s; i++) {
-    x = fires.getInt(i, 0);
-    y = fires.getInt(i, 1);
+    y = fires.getInt(i, 0);
+    x = fires.getInt(i, 1);
     tn = (x-1)*9+y-1;
     for (int j=0; j<52; j++) {
       if (wind[tn][j] == -1) {
@@ -262,8 +262,8 @@ void setUpTemp() {
     }
   }
   for (int i=1; i<s; i++) {
-    x = fires.getInt(i, 0);
-    y = fires.getInt(i, 1);
+    y = fires.getInt(i, 0);
+    x = fires.getInt(i, 1);
     tn = (x-1)*9+y-1;
     for (int j=0; j<52; j++) {
       if (temp[tn][j] == -1) {
@@ -287,7 +287,7 @@ void mousePressed(){
             //Right now just prints but can be used to change data for the subvisuals
             sel_i = i;
             sel_j = j;
-            n = (j-1)*9+i-1;
+            n = (i-1)*9+j-1;
             fill(0);
             textAlign(CENTER,CENTER);
             textSize(30);
@@ -306,7 +306,7 @@ void drawSubVis1(){
   int subvisw = 400;
   int subvish = 250;
   fill(0);
-  rect(720,300,400,250);
+  stroke(150,0,0);
   drawSub1Axis();
   if (n>-1) {
     boolean done = false;
@@ -315,7 +315,8 @@ void drawSubVis1(){
       if (wind[n][i]>-1) {
         float xcoord = beginx+temp[n][i]*(subvisw-10)/35;
         float ycoord = beginy+subvish-10-wind[n][i]*(subvish-10)/10;
-        ellipse(xcoord,ycoord,2,2);
+        line(xcoord-3,ycoord,xcoord+3,ycoord);
+        line(xcoord,ycoord-3,xcoord,ycoord+3);
         i++;
         if (i>=52) {
           done = true;
@@ -336,6 +337,13 @@ void drawSub1Axis() {
   int subvish = 250;
   line(beginx+4,beginy,beginx+4,beginy+subvish-10);
   line(beginx+4,beginy+subvish-10,beginx+4+subvisw,beginy+subvish-10);
+  textSize(12);
+  text("Temperature",beginx+subvisw/2,beginy+subvish+15);
+  pushMatrix();
+  translate(beginx-27,beginy+subvish/2);
+  rotate(-PI/2);
+  text("wind",0,0);
+  popMatrix();
   for (int i=0;i<11;i++) {
     int ycoord = beginy+subvish-10-i*(subvish-10)/10;
     line(beginx-4,ycoord,beginx+4,ycoord);
@@ -354,6 +362,8 @@ void drawSub1Axis() {
 
 void drawSubVis2(){
   
+  fill(0);
+  rect(740,320,400,250);
   
 }
 
