@@ -15,6 +15,9 @@ float wind[][] = new float[81][52];
 float temp[][] = new float[81][52];
 int sel_i, sel_j, n;
 
+//for bar graph
+int[] data=new int[1];
+
 void setup(){
   size(1200, 600, P3D);
   img = loadImage("monte.png");
@@ -361,10 +364,26 @@ void drawSub1Axis() {
 
 
 void drawSubVis2(){
-  
+  String[] label = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+  int beginx = 740;
+  int beginy = 310;
+  int subvisw = 400;
+  int subvish = 250;
+  int margin = 400/12;
   fill(0);
-  rect(740,320,400,250);
-  
+  //rect(740,320,400,250);
+  strokeWeight(1);
+  stroke(0);
+  line(beginx,beginy,beginx,beginy+subvish); //vertical line
+  line(beginx,beginy+subvish,beginx+subvisw,beginy+subvish); //horizontal line
+  int x = 0;
+  textSize(14);
+  for(int i=beginx+margin/2; i<beginx+subvisw;i+=margin){
+  line(i,beginy+subvish-5,i,beginy+subvish+5); //vertical tick marks
+  text(label[x],i-1,beginy+subvish+10);
+  x++;
+  }
+  text("Month",beginx+subvisw/2,beginy+subvish+30);
 }
 
 //referneces https://forum.processing.org/one/topic/create-multiple-buttons-in-processing.html
