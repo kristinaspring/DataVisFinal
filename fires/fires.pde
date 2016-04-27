@@ -16,7 +16,7 @@ float temp[][] = new float[81][52];
 int sel_i, sel_j, n;
 
 //for bar graph
-int[] data=new int[1];
+int months[][] = new int[81][52];
 
 void setup(){
   size(1200, 600);
@@ -25,6 +25,7 @@ void setup(){
   fillFire();
   setUpWind();
   setUpTemp();
+  setUpMonths();
   num_fires[0][0] = 0;
   sel_i = 1;
   sel_j = 1;
@@ -278,6 +279,59 @@ void setUpTemp() {
 }
 
 
+void setUpMonths()
+{
+  int s = fires.getRowCount();
+  int x = 1;
+  int y = 1;
+  int tn = 0;
+  for (int i=0; i<81; i++) 
+  {
+    for (int j=0; j<52; j++) 
+    {
+      months[i][j] = -1;
+    }
+  }
+  for (int i=1; i<s; i++) 
+  {
+    y = fires.getInt(i, 0);
+    x = fires.getInt(i, 1);
+    tn = (x-1)*9+y-1;
+    for (int j=0; j<52; j++) 
+    {
+      if (months[tn][j] == -1) 
+      {
+        String mont = fires.getString(i,2);
+        if (mont.equals("jan"))
+          months[tn][j] = 1;
+        else if (mont.equals("feb"))
+          months[tn][j] = 2;
+        else if (mont.equals("mar"))
+          months[tn][j] = 3;
+        else if (mont.equals("apr"))
+          months[tn][j] = 4;
+        else if (mont.equals("may"))
+          months[tn][j] = 5;
+        else if (mont.equals("jun"))
+          months[tn][j] = 6;
+        else if (mont.equals("jul"))
+          months[tn][j] = 7;
+        else if (mont.equals("aug"))
+          months[tn][j] = 8;
+        else if (mont.equals("sep"))
+          months[tn][j] = 9;
+        else if (mont.equals("oct"))
+          months[tn][j] = 10;
+        else if (mont.equals("nov"))
+          months[tn][j] = 11;
+        else if (mont.equals("dec"))
+          months[tn][j] = 12;
+        j=52;
+      }
+    }
+  }
+}
+
 //Desc: Createes buttons for all the sectors and when a ssector is clicked causes the subvisdata to change to reflect that data.
 void mousePressed(){
   
@@ -371,6 +425,37 @@ void drawSubVis2(){
   int subvisw = 400;
   int subvish = 250;
   int margin = 400/12;
+  
+  int bars[] = new int[12];
+  int largest = 0;
+  
+  if (n>-1) 
+  {
+    boolean done = false;
+    int i = 0;
+    while (!done) 
+    {
+      int month = months[n][i];
+      if (month>-1) 
+      {
+        bars[month-1]++;
+        if(bars[month-1]>largest)
+        {
+          largest = bars[month-1];
+        }
+        i++;
+        if (i>=52) 
+        {
+          done = true;
+        }
+      }
+      else 
+      {
+        done = true;
+      }
+    }
+  }
+  
   fill(0);
   //rect(740,320,400,250);
   strokeWeight(1);
@@ -379,10 +464,44 @@ void drawSubVis2(){
   line(beginx,beginy+subvish,beginx+subvisw,beginy+subvish); //horizontal line
   int x = 0;
   textSize(14);
-  for(int i=beginx+margin/2; i<beginx+subvisw;i+=margin){
-  line(i,beginy+subvish-5,i,beginy+subvish+5); //vertical tick marks
-  text(label[x],i-1,beginy+subvish+10);
-  x++;
+  
+  if(largest > 0)
+  {
+    //y axis
+    int sizeY = subvish/largest;
+    int yCount = 1;
+    int yStep = 1;
+    if(largest >40)
+      yStep = 8;
+    else if(largest > 20)
+      yStep = 4;
+    else if(largest > 10)
+      yStep = 2;
+    for(int i=beginy+subvish-sizeY; i>=beginy;i-=(sizeY*yStep))
+    {
+      line(beginx-5,i,beginx,i); //vertical tick marks
+      text(yCount,beginx-15,i-2);
+      yCount+=yStep;
+    }
+    
+    if(yCount-yStep < largest)
+    {
+      line(beginx-5,beginy,beginx,beginy); //vertical tick marks
+      text(largest,beginx-15,beginy-2);
+    }
+    
+    for(int i=0; i<12;i++)
+    {
+      rect(beginx+i*margin,beginy+subvish-sizeY*bars[i],margin,sizeY*bars[i]);
+    }
+  }
+  
+  //X axis
+  for(int i=beginx+margin/2; i<beginx+subvisw;i+=margin)
+  {
+    line(i,beginy+subvish-5,i,beginy+subvish+5); //vertical tick marks
+    text(label[x],i-1,beginy+subvish+10);
+    x++;
   }
   text("Month",beginx+subvisw/2,beginy+subvish+30);
 }
