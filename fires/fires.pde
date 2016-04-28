@@ -10,7 +10,7 @@ PImage img;
 
 //only indexes 1-9 are used for sake of clarity with the map
 int num_fires[][] = new int[10][10];
-int rec_pos[][][] = new int[10][10][4];
+float rec_pos[][][] = new float[10][10][4];
 float wind[][] = new float[81][52];
 float temp[][] = new float[81][52];
 int sel_i, sel_j, n;
@@ -42,7 +42,7 @@ void draw(){
   drawSubVis2();
 }
 
-
+//Desc: creates the text for the sector number and the number of fires for that sector
 void drawText(){
   fill(0);
   textSize(30);
@@ -55,7 +55,7 @@ void colorMap(){
   int i, j;
   int init_rec_x = 5;
   int rec_x = 5;
-  int rec_y = 0;
+  float rec_y = 0.0;
   int rec_h = 50;
   int rec_w = 73;
   int mid_rec_w = 79;
@@ -65,7 +65,13 @@ void colorMap(){
     {
       for(j = 1; j < 10; j++)
       {
-         fill(getRed(num_fires[j][i]), 175);
+        
+         if (getRed(num_fires[j][i]) == 1){
+           noFill();
+         }
+         else{
+           fill(getRed(num_fires[j][i]), 175);
+         }
          
          if (sel_j == j && sel_i == i){
            stroke(#002DA5);
@@ -142,7 +148,7 @@ void colorMap(){
       }
       
       rec_x = init_rec_x; //+ (rec_h * i);
-      rec_y = rec_y + rec_h - 2;
+      rec_y = rec_y + rec_h - 2.1;
 
     }
   
@@ -151,34 +157,22 @@ void colorMap(){
 //Desc: creates the color coded circles to the right of the map 
 void makeColorKey(){
   noStroke();
-  fill(#ff4d4d, 175);
+  fill(#FF9999, 175);
   ellipse(50, 550, 60, 60);
   fill(#ff1a1a, 175);
   ellipse(150, 550, 60, 60);
-  fill(#ff0000, 175);
+  fill(#FC0000, 175);
   ellipse(250, 550, 60, 60);
-  fill(#e60000, 175);
-  ellipse(350, 550, 60, 60);
   fill(#cc0000, 175);
+  ellipse(350, 550, 60, 60);
+  fill(#930000, 175);
   ellipse(450, 550, 60, 60);
   
-  
-  /*fill(#ff0000, 100);
-  ellipse(1050, 50, 60, 60);
-  fill(#e50000, 100);
-  ellipse(1050, 125, 60, 60);
-  fill(#cc0000, 100);
-  ellipse(1050, 200, 60, 60);
-  fill(#b20000, 100);
-  ellipse(1050, 275, 60, 60);
-  fill(#990000, 100);
-  ellipse(1050, 350, 60, 60);*/
-  
-  
+
   fill(255);
   textAlign(CENTER,CENTER);
   textSize(15);
-  text("0-10", 50,  550);
+  text("1-10", 50,  550);
   text("11-20", 150, 550);
   text("21-30", 250, 550);
   text("31-40", 350, 550);
@@ -189,16 +183,18 @@ void makeColorKey(){
 
 //Desc: takes an integer and assigns the correct shade of red corresponding to the color key
 int getRed(int num){
-  if( num > -1 && num < 11)
+  if (num == 0)
+    return 1;
+  if( num > 0 && num < 11)
     return #FF9999;
   if( num >= 11 && num < 21)
-    return #ff7f7f;
+    return #ff1a1a;
   if( num >= 21 && num < 31)
-    return #ff4c4c;
+    return #FC0000;
   if( num >= 31 && num < 41)
-    return #ff3232;
+    return #cc0000;
   if( num >= 41)
-    return #ff0000;
+    return #930000;
   
   
   return 0;
@@ -231,6 +227,7 @@ void fillFire(){
     }*/
 }
 
+//Desc: pulls wind values from the table given a sector's coordinates
 void setUpWind() {
   int s = fires.getRowCount();
   int x = 1;
@@ -254,7 +251,7 @@ void setUpWind() {
   }
 }
 
-
+//Desc: pulls temp values from the table given a sector's coordinates
 void setUpTemp() {
   int s = fires.getRowCount();
   int x = 1;
@@ -278,7 +275,7 @@ void setUpTemp() {
   }
 }
 
-
+//Desc: pulls data values from the table given a sector's coordinates
 void setUpMonths()
 {
   int s = fires.getRowCount();
@@ -356,7 +353,7 @@ void mousePressed(){
   
 }
 
-
+//Desc: draws the scatterplot to the screen in the upper right hand corner
 void drawSubVis1(){
   int beginx = 740;
   int beginy = 30;
@@ -388,6 +385,7 @@ void drawSubVis1(){
   
 }
 
+//Desc: draws axis for the scatterplot visual
 void drawSub1Axis() {
   int beginx = 740;
   int beginy = 30;
@@ -414,10 +412,10 @@ void drawSub1Axis() {
     line(xcoord,ycoord,xcoord,ycoord+8);
     textSize(10);
     text(i*5,xcoord,ycoord+12);
-    }
+  }
 }
 
-
+//Desc: draws the bar chart to the screen in the lower right hand corner
 void drawSubVis2(){
   String[] label = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
   int beginx = 740;
@@ -425,7 +423,6 @@ void drawSubVis2(){
   int subvisw = 400;
   int subvish = 250;
   int margin = 400/12;
-  
   int bars[] = new int[12];
   int largest = 0;
   
